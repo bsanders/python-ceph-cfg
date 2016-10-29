@@ -7,6 +7,7 @@ import binascii
 
 # local modules
 from . util_configparser import ConfigParserCeph as ConfigParser
+from . util_configparser import DefaultSectionHeader
 
 __has_salt = True
 
@@ -58,7 +59,7 @@ def _get_cluster_uuid_from_name(cluster_name):
     if not os.path.isfile(configfile):
         raise Error("Cluster confg file does not exist:'%s'" % configfile)
     config = ConfigParser()
-    config.read(configfile)
+    config.readfp(DefaultSectionHeader(configfile))
     try:
         fsid = config.get("global","fsid")
     except ConfigParser.NoOptionError:
@@ -73,7 +74,7 @@ def _get_cluster_name_from_uuid(cluster_uuid):
             continue
         fullpath = os.path.join("/etc/ceph/", file_name)
         config = ConfigParser()
-        config.read(fullpath)
+        config.readfp(DefaultSectionHeader(fullpath))
         try:
             fsid = config.get("global","fsid")
             if fsid is not None:

@@ -17,7 +17,7 @@ except:
 from . import constants
 from . import utils
 from . import util_which
-
+from . util_configparser import DefaultSectionHeader
 
 log = logging.getLogger(__name__)
 
@@ -380,7 +380,7 @@ class model_updater():
         configfile = "/etc/ceph/%s.conf" % (cluster_name)
         if not os.path.isfile(configfile):
             raise Error("Cluster confg file does not exist:'%s'" % configfile)
-        self.model.ceph_conf.read(configfile)
+        self.model.ceph_conf.readfp(DefaultSectionHeader(configfile))
 
     def mon_members_refresh(self):
         try:
